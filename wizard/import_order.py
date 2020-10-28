@@ -16,6 +16,7 @@ class ImportOrder(models.TransientModel):
     def import_json_file(self):
         self.ensure_one()
         Order = self.env['sale.order']
+        # TODO: encoding issue with product names
         string_data = base64.decodestring(self.json_file)
         data = json.loads(string_data)['data']
         # To create an order first we need a customer
