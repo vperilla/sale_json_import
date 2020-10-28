@@ -2,14 +2,14 @@
 
 from odoo import models, fields, api
 
-# class sale_json_import(models.Model):
-#     _name = 'sale_json_import.sale_json_import'
 
-#     name = fields.Char()
-#     value = fields.Integer()
-#     value2 = fields.Float(compute="_value_pc", store=True)
-#     description = fields.Text()
-#
-#     @api.depends('value')
-#     def _value_pc(self):
-#         self.value2 = float(self.value) / 100
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    external = fields.Boolean('Is external')
+    external_date = fields.Date('Date', readonly=True)
+    external_id = fields.Integer('ID', readonly=True)
+    external_status = fields.Char('Status', readonly=True)
+    external_payment_method = fields.Selection([
+        ('credit-card', 'Credit Card'),
+    ], 'Payment Method', readonly=True)
