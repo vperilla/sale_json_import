@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+        <record id="view_import_order" model="ir.ui.view">
+              <field name="name">import.order.form</field>
+              <field name="model">import.order</field>
+              <field name="arch" type="xml">
+                <form string="Import Order from Json File">
+                    <group string="Select your file">
+                        <field name="json_file"/>
+                    </group>
+                    <footer>
+                        <button name="import_json_file" string="Import"  type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+              </field>
+        </record>
+
+        <record id="action_import_order" model="ir.actions.act_window">
+            <field name="name">Import Order from JSON</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_import_order"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+              action="action_import_order" id="menu_import_order"
+              parent="sale.sale_order_menu" sequence="100"/>
+
+</data>
+</odoo>
