@@ -16,7 +16,8 @@ class ImportOrder(models.TransientModel):
     def import_json_file(self):
         self.ensure_one()
         Order = self.env['sale.order']
-        data = json.loads(base64.decodestring(self.json_file))['data']
+        string_data = base64.decodestring(self.json_file)
+        data = json.loads(string_data)['data']
         # To create an order first we need a customer
         Customer = self.env['res.partner']
         customer_data = data['customer']
@@ -68,7 +69,6 @@ class ImportOrder(models.TransientModel):
         })
         Product = self.env['product.product']
         Line = self.env['sale.order.line']
-        breakpoint()
         for sequence, line in enumerate(data['lines']):
             product = Product.search([
                 ('barcode', '=', line['barcode'][0])
