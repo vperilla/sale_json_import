@@ -74,7 +74,7 @@ class ImportOrder(models.TransientModel):
             price = line['price_unit']
             description = line['name']
             quantity = line['units']
-            order_line = Line.create({
+            order_line = Line.create({  # noqa
                 'order_id': order.id,
                 'product_id': product.id,
                 'name': description,
@@ -82,4 +82,16 @@ class ImportOrder(models.TransientModel):
                 'price_unit': price,
                 'sequence': sequence,
             })
-        print('something')
+
+        view = self.env.ref('sale.view_order_form')
+        return {
+            'name': _('Imported Order'),
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'sale.order',
+            'views': [(view.id, 'form')],
+            'view_id': view.id,
+            'res_id': order.id,
+            'context': self.env.context,
+        }
