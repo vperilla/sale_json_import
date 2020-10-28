@@ -68,16 +68,28 @@ class ImportOrder(models.TransientModel):
         })
         Product = self.env['product.product']
         Line = self.env['sale.order.line']
+        breakpoint()
         for sequence, line in enumerate(data['lines']):
-            product = Product.search([])[0]
+            product = Product.search([
+                ('barcode', '=', line['barcode'][0])
+            ])
+            if product:
+                product = product[0]
+            else:
+                # Create product
+                product = Product.create({
+                    'code': line['sku'],
+                    'name': line['name'],
+                    'barcode': line['barcode'][0],
+                    'lst_price': line['price_unit'],
+                })
             quantity = line['units']
             price = line['price_unit']
-            description = line['name']
             quantity = line['units']
             order_line = Line.create({  # noqa
                 'order_id': order.id,
                 'product_id': product.id,
-                'name': description,
+                'name': line['name'],
                 'product_uom_qty': quantity,
                 'price_unit': price,
                 'sequence': sequence,
